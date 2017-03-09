@@ -15,6 +15,8 @@
 	#include <avr/eeprom.h>
 #endif
 
+TimeChangeRule gmt = {"GMT", Last, Sun, Oct, 2, 0};
+
 /*----------------------------------------------------------------------*
  * Create a Timezone object from the given time change rules.           *
  *----------------------------------------------------------------------*/
@@ -22,6 +24,25 @@ Timezone::Timezone(TimeChangeRule dstStart, TimeChangeRule stdStart)
 {
     _dst = dstStart;
     _std = stdStart;
+}
+
+/*----------------------------------------------------------------------*
+ * Create a Timezone object with no zone offsets                        *
+ *----------------------------------------------------------------------*/
+Timezone::Timezone()
+{
+  _dst = gmt;
+  _std = gmt;
+}
+
+/*----------------------------------------------------------------------*
+ * Create a Timezone object from the given time change rules.           *
+ *----------------------------------------------------------------------*/
+void Timezone::setRules(TimeChangeRule dstStart, TimeChangeRule stdStart)
+{
+    _dst = dstStart;
+    _std = stdStart;
+    _dstUTC = 0;  // force calcTimeChanges() to be called when needed
 }
 
 #ifdef __AVR__
@@ -48,6 +69,20 @@ time_t Timezone::toLocal(time_t utc)
         return utc + _dst.offset * SECS_PER_MIN;
     else
         return utc + _std.offset * SECS_PER_MIN;
+}
+
+/*----------------------------------------------------------------------*
+ * Calculate the zone offset for a given utc time                       *
+ *----------------------------------------------------------------------*/
+int16_t Timezone::offset(time_t utc)
+{
+    //recalculate the time change points if needed
+    if (year(utc) != year(_dstUTC)) calcTimeChanges(year(utc));
+
+    if (utcIsDST(utc))
+        return _dst.offset * SECS_PER_MIN;
+    else
+        return _std.offset * SECS_PER_MIN;
 }
 
 /*----------------------------------------------------------------------*
