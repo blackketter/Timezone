@@ -32,7 +32,7 @@ struct TimeChangeRule
     uint8_t dow;       //day of week, 1=Sun, 2=Mon, ... 7=Sat
     uint8_t month;     //1=Jan, 2=Feb, ... 12=Dec
     uint8_t hour;      //0-23
-    int16_t offset;        //offset from UTC in minutes
+    int16_t offset;    //offset from UTC in minutes
 };
 
 class Timezone
@@ -45,7 +45,7 @@ class Timezone
         time_t toLocal(time_t utc);
         time_t toLocal(time_t utc, TimeChangeRule **tcr);
         time_t toUTC(time_t local);
-        int16_t offset(time_t utc);
+        int32_t offset(time_t utc);  // returns time zone offset in seconds
         boolean utcIsDST(time_t utc);
         boolean locIsDST(time_t local);
         void readRules(int address);

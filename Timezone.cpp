@@ -74,7 +74,7 @@ time_t Timezone::toLocal(time_t utc)
 /*----------------------------------------------------------------------*
  * Calculate the zone offset for a given utc time                       *
  *----------------------------------------------------------------------*/
-int16_t Timezone::offset(time_t utc)
+int32_t Timezone::offset(time_t utc)
 {
     //recalculate the time change points if needed
     if (year(utc) != year(_dstUTC)) calcTimeChanges(year(utc));
