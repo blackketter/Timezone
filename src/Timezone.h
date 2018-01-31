@@ -48,6 +48,8 @@ class Timezone
         void readRules(int address);
         void writeRules(int address);
 
+        TimeChangeRule* rule(time_t utc) { return (utcIsDST(utc) ? &m_dst : &m_std); };
+
     private:
         void calcTimeChanges(int yr);
         time_t toTime_t(TimeChangeRule r, int yr);
