@@ -36,6 +36,7 @@ class Timezone
 {
     public:
         Timezone(TimeChangeRule dstStart, TimeChangeRule stdStart);
+        Timezone(TimeChangeRule stdTime);
         Timezone(int address);
         Timezone();
         time_t toLocal(time_t utc);
@@ -52,6 +53,7 @@ class Timezone
 
     private:
         void calcTimeChanges(int yr);
+        void initTimeChanges();
         time_t toTime_t(TimeChangeRule r, int yr);
         TimeChangeRule m_dst;   // rule for start of dst or summer time for any year
         TimeChangeRule m_std;   // rule for start of standard time for any year

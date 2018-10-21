@@ -1,9 +1,18 @@
-# Arduino Timezone Library 1.1.0
+# Arduino Timezone Library
 https://github.com/JChristensen/Timezone  
 README file  
-Jack Christensen Mar 2012  
+Jack Christensen  
+Mar 2012  
 
-![CC BY-SA](http://mirrors.creativecommons.org/presskit/buttons/80x15/png/by-sa.png)
+## License
+Arduino Timezone Library Copyright (C) 2018 Jack Christensen GNU GPL v3.0
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License v3.0 as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/gpl.html>
 
 ## Introduction
 The **Timezone** library is designed to work in conjunction with the [Arduino Time library](https://github.com/PaulStoffregen/Time), which must also be installed on your system. This documentation assumes some familiarity with the Time library.
@@ -58,14 +67,14 @@ TimeChangeRule usEDT = {"EDT", Second, Sun, Mar, 2, -240};  //UTC - 4 hours
 TimeChangeRule usEST = {"EST", First, Sun, Nov, 2, -300};   //UTC - 5 hours
 ```
 
-For a time zone that does not change to daylight/summer time, pass the same rule twice to the constructor, for example:  
-`Timezone usAZ(usMST, usMST);`
-
 ## Coding Timezone objects
-There are two ways to define **Timezone** objects.
+There are three ways to define **Timezone** objects.
 
 By first defining **TimeChangeRule**s (as above) and giving the daylight time rule and the standard time rule (assuming usEDT and usEST defined as above):  
 `Timezone usEastern(usEDT, usEST);`
+
+For a time zone that does not change to daylight/summer time, pass a single rule to the constructor. For example:  
+`Timezone usAZ(usMST, usMST);`
 
 By reading rules previously stored in EEPROM.  This reads both the daylight and standard time rules previously stored at EEPROM address 100:  
 `Timezone usPacific(100);`

@@ -1,4 +1,7 @@
-// Timezone library example sketch.
+// Arduino Timezone Library Copyright (C) 2018 by Jack Christensen and
+// licensed under GNU GPL v3.0, https://www.gnu.org/licenses/gpl.html
+//
+// Arduino Timezone Library example sketch.
 // Demonstrates changing timezone "on the fly".
 // Uses a pushbutton switch to change between the four continental US time zones.
 // The current timezone setting is saved in EEPROM so it is remembered if
@@ -8,14 +11,12 @@
 // Jack Christensen 02Jan2018
 
 #include <avr/eeprom.h>
-#include <Button.h>             // http://github.com/JChristensen/Button
+#include <JC_Button.h>          // http://github.com/JChristensen/JC_Button
 #include <Streaming.h>          // http://arduiniana.org/libraries/streaming/
 #include <Timezone.h>           // http://github.com/JChristensen/Timezone
 
-const uint8_t BUTTON_PIN(9);    // connect a button from this pin to ground
-const bool PULLUP(true), INVERT(true);
-const uint32_t DEBOUNCE_MS(25);
-Button btn(BUTTON_PIN, PULLUP, INVERT, DEBOUNCE_MS);
+const uint8_t BUTTON_PIN(8);    // connect a button from this pin to ground
+Button btn(BUTTON_PIN);
 
 uint8_t tzIndex;            //index to the arrays below
 EEMEM uint8_t ee_tzIndex;   //copy of tzIndex persisted in EEPROM
@@ -43,6 +44,7 @@ void setup()
         eeprom_write_byte( &ee_tzIndex, tzIndex);
     }
 
+    btn.begin();
     Serial.begin(115200);
     changeTZ();
 }
@@ -96,7 +98,7 @@ void printDateTime(time_t t)
 time_t compileTime()
 {
     const time_t FUDGE(10);    //fudge factor to allow for upload time, etc. (seconds, YMMV)
-    char *compDate = __DATE__, *compTime = __TIME__, *months = "JanFebMarAprMayJunJulAugSepOctNovDec";
+    const char *compDate = __DATE__, *compTime = __TIME__, *months = "JanFebMarAprMayJunJulAugSepOctNovDec";
     char compMon[3], *m;
 
     strncpy(compMon, compDate, 3);
